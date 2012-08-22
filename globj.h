@@ -12,7 +12,7 @@ public:
 		Norm = n;
 	}
 	bool operator == (const CacheEntry &other) const {
-		return (other.Norm == norm && other.Vert == Vert && other.Tex == Tex);
+		return (other.Norm == Norm && other.Vert == Vert && other.Tex == Tex);
 	}
 
 };
