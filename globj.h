@@ -30,13 +30,13 @@ public:
 	}
 	void loadFile(QString file) {
 		Init = false;
-		loadFile(file);
+		readFile(file);
 		initBuf();
 	}
 
 	void loadFile(QString file, QVector3D scale) {
 		Init = false;
-		loadFile(file);
+		readFile(file);
 		scaleAndCenter(scale);
 		initBuf();
 	}
@@ -67,7 +67,7 @@ public:
 		glRotatef(-90, 0,1,0);
 		glTranslatef( -x, -y, -z);
 	}
-	void loadFile(QString file) {
+	void readFile(QString file) {
 		QVector<GLuint> tmpInd;
 		QVector<QVector3D> tmpVert, tmpTex, tmpNorm;
 		QVector<CacheEntry> cache;
