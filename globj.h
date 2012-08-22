@@ -26,7 +26,7 @@ public:
 	QVector3D MinVec, MaxVec;
 	bool Init;
 	GLObj() {
-		init = false;
+		Init = false;
 	}
 	void loadFile(QString file) {
 		Init = false;
