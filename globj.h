@@ -41,20 +41,20 @@ public:
 		initBuf();
 	}
 
-	void draw(float x, float y, float z) {
+	void draw(float x, float y, float z, bool enableTexture = true) {
 
 		//glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_PROJECTION);
 
 		glTranslatef( x, y, z);
-		glRotatef(90, 0,1,0);
-
 
 		glEnableClientState( GL_VERTEX_ARRAY );
 		glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 		BufFloat.bind();
 		glVertexPointer(3, GL_FLOAT, 3*sizeof(QVector3D), 0);
-		glTexCoordPointer(3, GL_FLOAT,3*sizeof(QVector3D), (void *) sizeof(QVector3D));
+		if (enableTexture) {
+			glTexCoordPointer(3, GL_FLOAT,3*sizeof(QVector3D), (void *) sizeof(QVector3D));
+		}
 		glNormalPointer(GL_FLOAT, 3*sizeof(QVector3D), (void *) (2*sizeof(QVector3D)));
 		BufInt.bind();
 		glIndexPointer(GL_UNSIGNED_INT, 2*sizeof(GLuint), 0);
@@ -64,7 +64,6 @@ public:
 		glDisableClientState( GL_VERTEX_ARRAY );
 		glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 
-		glRotatef(-90, 0,1,0);
 		glTranslatef( -x, -y, -z);
 	}
 	void readFile(QString file) {
