@@ -25,17 +25,22 @@ public:
 	QGLBuffer BufInt, BufFloat;
 	QVector3D MinVec, MaxVec;
 	bool Init;
-	GLObj(QString file) {
+	GLObj() {
+		init = false;
+	}
+	void loadFile(QString file) {
 		Init = false;
 		loadFile(file);
 		initBuf();
 	}
-	GLObj(QString file, QVector3D scale) {
+
+	void loadFile(QString file, QVector3D scale) {
 		Init = false;
 		loadFile(file);
 		scaleAndCenter(scale);
 		initBuf();
 	}
+
 	void draw(float x, float y, float z) {
 
 		//glClear(GL_COLOR_BUFFER_BIT);
