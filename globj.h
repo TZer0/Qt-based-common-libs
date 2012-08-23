@@ -49,14 +49,14 @@ public:
 		glTranslatef( x, y, z);
 
 		glEnableClientState( GL_VERTEX_ARRAY );
-		glEnableClientState( GL_COLOR_ARRAY );
-		glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 		BufFloat.bind();
 		glVertexPointer(3, GL_FLOAT, 3*sizeof(QVector3D), 0);
 		if (enableTexture) {
+			glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 			glTexCoordPointer(3, GL_FLOAT,3*sizeof(QVector3D), (void *) sizeof(QVector3D));
 		}
 		if (enableColor) {
+			glEnableClientState( GL_COLOR_ARRAY );
 			glColorPointer(3, GL_FLOAT,3*sizeof(QVector3D), (void *) sizeof(QVector3D));
 		}
 		glNormalPointer(GL_FLOAT, 3*sizeof(QVector3D), (void *) (2*sizeof(QVector3D)));
@@ -65,9 +65,13 @@ public:
 		glDrawElements(GL_TRIANGLES, IndNum, GL_UNSIGNED_INT, 0);
 		BufFloat.release();
 		BufInt.release();
+		if (enableTexture) {
+			glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+		}
+		if (enableColor) {
+			glDisableClientState( GL_COLOR_ARRAY );
+		}
 		glDisableClientState( GL_VERTEX_ARRAY );
-		glDisableClientState( GL_COLOR_ARRAY );
-		glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 
 		glTranslatef( -x, -y, -z);
 	}
