@@ -31,17 +31,17 @@ public:
 	void loadFile(QString file) {
 		Init = false;
 		readFile(file);
-		initBuf();
+		upload();
 	}
 
 	void loadFile(QString file, QVector3D scale) {
 		Init = false;
 		readFile(file);
 		scaleAndCenter(scale);
-		initBuf();
+		upload();
 	}
 
-	void draw(float x, float y, float z, bool enableTexture = true) {
+	void draw(float x, float y, float z, bool enableTexture = true, bool enableColor = false) {
 
 		//glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_PROJECTION);
@@ -49,11 +49,15 @@ public:
 		glTranslatef( x, y, z);
 
 		glEnableClientState( GL_VERTEX_ARRAY );
+		glEnableClientState( GL_COLOR_ARRAY );
 		glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 		BufFloat.bind();
 		glVertexPointer(3, GL_FLOAT, 3*sizeof(QVector3D), 0);
 		if (enableTexture) {
 			glTexCoordPointer(3, GL_FLOAT,3*sizeof(QVector3D), (void *) sizeof(QVector3D));
+		}
+		if (enableColor) {
+			glColorPointer(3, GL_FLOAT,3*sizeof(QVector3D), (void *) sizeof(QVector3D));
 		}
 		glNormalPointer(GL_FLOAT, 3*sizeof(QVector3D), (void *) (2*sizeof(QVector3D)));
 		BufInt.bind();
@@ -62,6 +66,7 @@ public:
 		BufFloat.release();
 		BufInt.release();
 		glDisableClientState( GL_VERTEX_ARRAY );
+		glDisableClientState( GL_COLOR_ARRAY );
 		glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 
 		glTranslatef( -x, -y, -z);
@@ -146,7 +151,7 @@ public:
 		MinVec = QVector3D(0,0,0);
 		MaxVec = scale;
 	}
-	void initBuf() {
+	void upload() {
 		if (!Init) {
 			BufFloat = QGLBuffer(QGLBuffer::VertexBuffer);
 			BufInt = QGLBuffer(QGLBuffer::IndexBuffer);
@@ -159,16 +164,31 @@ public:
 			Init = true;
 		}
 
-		InitVert();
+		uploadVert();
+		uploadInd();
 
-		BufInt.write(0, &Indices[0], sizeof(GLuint)*Indices.size());
-		IndNum = Indices.size();
-		BufInt.setUsagePattern(QGLBuffer::StaticDraw);
 	}
-	void InitVert() {
+	void uploadVert() {
 		BufFloat.bind();
 		BufFloat.write(0, &Vertices[0], sizeof(QVector3D)*Vertices.size());
-		BufFloat.setUsagePattern(QGLBuffer::StaticDraw);
+		BufFloat.setUsagePattern(QGLBuffer::DynamicDraw);
+	}
+
+	void uploadInd() {
+		BufInt.write(0, &Indices[0], sizeof(GLuint)*Indices.size());
+		IndNum = Indices.size();
+		BufInt.setUsagePattern(QGLBuffer::DynamicDraw);
+	}
+
+	void SetColorOrTexPos(int pos, QVector3D value) {
+		Vertices[pos*3+1] = value;
+	}
+	void SetColorOrTexPos(QVector3D pos, QVector3D value) {
+		for (int i = 0; i <= Vertices.size()/3; i++) {
+			if ((Vertices[i*3]-pos).length() < 10e-14) {
+				Vertices[i*3+1] = value;
+			}
+		}
 	}
 };
 
