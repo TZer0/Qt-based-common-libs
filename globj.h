@@ -189,11 +189,9 @@ public:
 	}
 	void SetColorOrTexPos(QVector3D pos, QVector3D value) {
 		for (int i = 0; i < Vertices.size()/3; i++) {
-				qDebug() << i;
 			if ((Vertices[i*3]-pos).length() < 10e-14) {
 				Vertices[i*3+1] = value;
 			}
-				qDebug() << i;
 		}
 	}
 };
