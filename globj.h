@@ -65,11 +65,11 @@ public:
 		glDrawElements(GL_TRIANGLES, IndNum, GL_UNSIGNED_INT, 0);
 		BufFloat.release();
 		BufInt.release();
-		if (enableTexture) {
-			glDisableClientState( GL_TEXTURE_COORD_ARRAY );
-		}
 		if (enableColor) {
 			glDisableClientState( GL_COLOR_ARRAY );
+		}
+		if (enableTexture) {
+			glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 		}
 		glDisableClientState( GL_VERTEX_ARRAY );
 
