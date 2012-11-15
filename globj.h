@@ -41,13 +41,8 @@ public:
 		upload();
 	}
 
-	void draw(float x, float y, float z, bool enableTexture = true, bool enableColor = false) {
 
-		//glClear(GL_COLOR_BUFFER_BIT);
-		glMatrixMode(GL_PROJECTION);
-
-		glTranslatef( x, y, z);
-
+	void draw(bool enableTexture = true, bool enableColor = false) {
 		glEnableClientState( GL_VERTEX_ARRAY );
 		BufFloat.bind();
 		glVertexPointer(3, GL_FLOAT, 3*sizeof(QVector3D), 0);
@@ -72,7 +67,17 @@ public:
 			glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 		}
 		glDisableClientState( GL_VERTEX_ARRAY );
+	}
 
+	void draw(float x, float y, float z, bool enableTexture = true, bool enableColor = false) {
+
+		//glClear(GL_COLOR_BUFFER_BIT);
+		glMatrixMode(GL_PROJECTION);
+
+		glTranslatef( x, y, z);
+
+		draw(enableTexture, enableColor);
+		
 		glTranslatef( -x, -y, -z);
 	}
 	void readFile(QString file) {
